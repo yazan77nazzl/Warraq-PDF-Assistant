@@ -8,7 +8,7 @@ JavaScript syntax checks passed for the browser module. Secrets are excluded fro
 
 ## Live Gemini checks
 
-Gemini Embedding 2 returned 768-dimensional vectors with the configured Google key. A live hybrid search answered an Arabic colloquial installment question over English document text and cited page 1. An English follow-up correctly answered three monthly installments and cited page 1. A question about the capital of France returned notFound=true with no sources. Only synthetic document content was used.
+Gemini Embedding 2 returned 768-dimensional vectors with the configured Google key. A live hybrid search answered an Arabic colloquial installment question over English document text and cited page 1. An English follow-up correctly answered three monthly installments and cited page 1. A question about the capital of France returned notFound=true with no sources. Only synthetic document content was used. The deployed Vercel /api/config reported Arabic and English support and Gemini Embedding 2. A production /api/chat request returned HTTP 200, hybrid search, an English installment answer, and page 1 attribution. The published HTML contained the language switch.
 
 ## Interface verification
 

@@ -12,8 +12,6 @@
     <label class="primary upload-label" for="fileInput">اختيار ملف <span>＋</span></label><input id="fileInput" type="file" accept="application/pdf,.pdf" class="sr-only">
     <small>حتى 20 MB · 200 صفحة</small>
   </div>
-  <button class="sample" id="sampleButton" type="button"><span>✧</span> جرّب مستندًا جاهزًا <span>←</span></button>
-  <button class="sample" id="samplePdfButton" type="button"><span>▤</span> جرّب PDF فعليًا <span>←</span></button>
   <div id="documentCard" class="document-card" hidden><span class="pdf-label">PDF</span><div><strong id="documentName"></strong><small id="documentStats"></small></div><button id="removeDocument" class="icon-button" title="إزالة المستند" aria-label="إزالة المستند">×</button></div>
   <div class="sidebar-bottom"><span class="maker">© 2026 Yazan Nazzal. All rights reserved.</span></div>
 </aside>
@@ -29,7 +27,7 @@
           <div class="suggestions"><button data-question="لخص أهم النقاط في المستند">✧ استعرض أهم النقاط</button><button data-question="ما هي مدة الإرجاع؟">↩ ما مدة الإرجاع؟</button><button data-question="كم تستغرق مدة الشحن؟">◷ ما مدة الشحن؟</button></div>
         </div>
       </div>
-      <div class="composer-area"><div id="errorMessage" class="error" role="alert" hidden></div><form id="chatForm" class="composer"><textarea id="question" rows="2" maxlength="1000" placeholder="اسأل عن المعلومة اللي بدك تلاقيها…" aria-label="سؤالك عن المستند" disabled></textarea><div class="composer-bottom"><span id="composerHint">ارفع ملفًا أو جرّب المستند الجاهز أولًا</span><button id="sendButton" class="send" type="submit" aria-label="إرسال السؤال" disabled>↑</button></div></form><div class="composer-caption"><span>الإجابات مرتبطة بالنص المستخرج؛ راجع المصادر دائمًا.</span><button id="exportChat" disabled type="button">تنزيل المحادثة ↓</button></div></div>
+      <div class="composer-area"><div id="errorMessage" class="error" role="alert" hidden></div><form id="chatForm" class="composer"><textarea id="question" rows="2" maxlength="1000" placeholder="اسأل عن المعلومة اللي بدك تلاقيها…" aria-label="سؤالك عن المستند" disabled></textarea><div class="composer-bottom"><span id="composerHint">ارفع ملف PDF أولًا</span><button id="sendButton" class="send" type="submit" aria-label="إرسال السؤال" disabled>↑</button></div></form><div class="composer-caption"><span>الإجابات مرتبطة بالنص المستخرج؛ راجع المصادر دائمًا.</span><button id="exportChat" disabled type="button">تنزيل المحادثة ↓</button></div></div>
     </section>
     <aside class="source-panel" aria-label="مصادر الإجابات"><div class="source-heading"><div><span class="eyebrow">الدليل، بجانب الإجابة</span><h2>المصادر</h2></div><span id="sourceCount" class="circle-count">0</span></div><div id="sources" class="sources"><div class="empty-sources"><div>▤</div><h3>كل إجابة، إلها مرجع</h3><p>المقاطع وأرقام الصفحات تظهر هون بعد سؤالك، حتى تقدر تتأكد بنفسك.</p></div></div><div class="source-footer">بحث محلي في النص · مصادر قابلة للفتح</div></aside>
   </div>

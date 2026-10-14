@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { getConfig, answerQuestion } from './lib/service.mjs';
 const root = path.dirname(fileURLToPath(import.meta.url));
 try { process.loadEnvFile(path.join(root, '.env')); } catch (error) { if (error.code !== 'ENOENT') throw error; }
-const types = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.mjs':'text/javascript; charset=utf-8', '.pdf':'application/pdf', '.svg':'image/svg+xml', '.txt':'text/plain; charset=utf-8', '.bcmap':'application/octet-stream', '.ttf':'font/ttf', '.woff':'font/woff', '.wasm':'application/wasm' };
+const types = { '.html':'text/html; charset=utf-8', '.css':'text/css; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.mjs':'text/javascript; charset=utf-8', '.pdf':'application/pdf', '.svg':'image/svg+xml', '.png':'image/png', '.webmanifest':'application/manifest+json', '.txt':'text/plain; charset=utf-8', '.bcmap':'application/octet-stream', '.ttf':'font/ttf', '.woff':'font/woff', '.wasm':'application/wasm' };
 const port = Number(process.env.PORT || 4318);
 function json(res, code, value) { res.writeHead(code, {'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store'}); res.end(JSON.stringify(value)); }
 async function body(req) {

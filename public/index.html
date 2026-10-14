@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1018"><meta name="color-scheme" content="dark"><meta name="description" content="ورّاق — اسأل مستنداتك بالعربي واقرأ الإجابات مع مصادرها"><title>ورّاق — اسأل مستندك</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1018"><meta name="color-scheme" content="dark"><meta name="description" content="ورّاق — اسأل مستنداتك بالعربي واقرأ الإجابات مع مصادرها"><title>ورّاق — اسأل مستندك</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><meta name="apple-mobile-web-app-title" content="Warraq"><meta name="application-name" content="Warraq"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black"></head>
 <body>
 <div class="app-shell">
 <aside class="sidebar">
@@ -8,11 +8,11 @@
   <div class="side-label">مساحة العمل</div>
   <button class="nav active" type="button"><span>▤</span> اسأل مستندك <span class="nav-count">01</span></button>
   <div class="upload-card" id="dropZone">
-    <div class="upload-icon">↥</div><h2>ابدأ بملف PDF</h2><p>اسحب ملفك هنا، أو اختره من جهازك.</p>
-    <label class="primary upload-label" for="fileInput">اختيار ملف <span>＋</span></label><input id="fileInput" type="file" accept="application/pdf,.pdf" class="sr-only">
-    <small>حتى 20 MB · 200 صفحة</small>
+    <div class="upload-icon">↥</div><h2>ابدأ بمستند</h2><p>اسحب مستندك هنا، أو اختره من جهازك.</p>
+    <label class="primary upload-label" for="fileInput">اختيار ملف <span>＋</span></label><input id="fileInput" type="file" accept=".pdf,.docx,.txt,.pptx,application/pdf,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation" class="sr-only">
+    <small>حتى 20 MB · PDF / DOCX / TXT / PPTX</small>
   </div>
-  <div id="documentCard" class="document-card" hidden><span class="pdf-label">PDF</span><div><strong id="documentName"></strong><small id="documentStats"></small></div><button id="removeDocument" class="icon-button" title="إزالة المستند" aria-label="إزالة المستند">×</button></div>
+  <div id="documentCard" class="document-card" hidden><span class="pdf-label" id="documentBadge">PDF</span><div><strong id="documentName"></strong><small id="documentStats"></small></div><button id="removeDocument" class="icon-button" title="إزالة المستند" aria-label="إزالة المستند">×</button></div>
   <div class="sidebar-bottom"><span class="maker" dir="ltr">© 2026 Yazan Nazzal. All rights reserved.</span></div>
 </aside>
 <main class="workspace">
@@ -22,16 +22,16 @@
       <div id="messages" class="messages" aria-live="polite" aria-relevant="additions">
         <div id="welcome" class="welcome">
           <div class="paper-stack"><div class="paper-back"></div><div class="paper-front"><span>✦</span><i></i><i></i><i></i></div><div class="small-bubble">؟</div></div>
-          <span class="eyebrow">من صفحات كثيرة، إلى إجابة واضحة</span><h2>مستندك عنده الإجابة.<br>خلّينا نلاقيها معًا.</h2><p>ارفع PDF نصّي، اسأل بطريقتك، وارجع للصفحة<br class="desktop-only"> اللي وردت فيها المعلومة.</p>
+          <span class="eyebrow">من صفحات كثيرة، إلى إجابة واضحة</span><h2>مستندك عنده الإجابة.<br>خلّينا نلاقيها معًا.</h2><p>ارفع مستندك، اسأل بطريقتك، وارجع للمصدر<br class="desktop-only"> اللي وردت فيه المعلومة.</p>
           <div class="welcome-steps"><span><b>1</b> ارفع الملف</span><span class="step-line"></span><span><b>2</b> اكتب سؤالك</span><span class="step-line"></span><span><b>3</b> اقرأ المصدر</span></div>
           <div class="suggestions"><button data-question="لخص أهم النقاط في المستند">✧ استعرض أهم النقاط</button><button data-question="استخرج المواعيد المهمة في المستند">◷ استخرج المواعيد المهمة</button><button data-question="ما أهم الأرقام في المستند؟"># ما أهم الأرقام؟</button></div>
         </div>
       </div>
-      <div class="composer-area"><div id="errorMessage" class="error" role="alert" hidden></div><form id="chatForm" class="composer"><textarea dir="auto" id="question" rows="2" maxlength="1000" placeholder="اسأل عن المعلومة اللي بدك تلاقيها…" aria-label="سؤالك عن المستند" disabled></textarea><div class="composer-bottom"><span id="composerHint">ارفع ملف PDF أولًا</span><button id="sendButton" class="send" type="submit" aria-label="إرسال السؤال" disabled>↑</button></div></form><div class="composer-caption"><span>الإجابات مرتبطة بالنص المستخرج؛ راجع المصادر دائمًا.</span><button id="exportChat" disabled type="button">تنزيل المحادثة ↓</button></div></div>
+      <div class="composer-area"><div id="errorMessage" class="error" role="alert" hidden></div><form id="chatForm" class="composer"><textarea dir="auto" id="question" rows="2" maxlength="1000" placeholder="اسأل عن المعلومة اللي بدك تلاقيها…" aria-label="سؤالك عن المستند" disabled></textarea><div class="composer-bottom"><span id="composerHint">ارفع مستندًا أولًا</span><button id="sendButton" class="send" type="submit" aria-label="إرسال السؤال" disabled>↑</button></div></form><div class="composer-caption"><span>الإجابات مرتبطة بالنص المستخرج؛ راجع المصادر دائمًا.</span><button id="exportChat" disabled type="button">تنزيل المحادثة ↓</button></div></div>
     </section>
     <aside class="source-panel" aria-label="مصادر الإجابات"><div class="source-heading"><div><span class="eyebrow">الدليل، بجانب الإجابة</span><h2>المصادر</h2></div><span id="sourceCount" class="circle-count">0</span></div><div id="sources" class="sources"><div class="empty-sources"><div>▤</div><h3>كل إجابة، إلها مرجع</h3><p>المقاطع وأرقام الصفحات تظهر هون بعد سؤالك، حتى تقدر تتأكد بنفسك.</p></div></div><div class="source-footer">بحث محلي في النص · مصادر قابلة للفتح</div></aside>
   </div>
-  <footer class="workspace-footer"><span>ورّاق <span class="footer-separator">/</span> Arabic PDF Assistant</span><span>اقرأ بثقة · اسأل بالعربي</span></footer>
+  <footer class="workspace-footer"><span>ورّاق <span class="footer-separator">/</span> Document Assistant</span><span>اقرأ بثقة · اسأل بالعربي</span></footer>
 </main>
 </div>
 <dialog id="sourceDialog"><div class="dialog-top"><h2 id="sourceDialogTitle">الصفحة</h2><button id="closeSource" class="icon-button" aria-label="إغلاق المصدر">×</button></div><div dir="auto" id="pageText" class="page-text"></div><canvas id="pdfCanvas" hidden></canvas></dialog>

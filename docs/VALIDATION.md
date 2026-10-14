@@ -1,25 +1,9 @@
 # Verification — 14 October 2026
 
-## Automated checks
+49 Node.js tests cover retrieval, citations, bilingual UI strings, query planning, adaptive review, request accounting, isolated answer caching, context compaction, broader retry, compressed Word packages, TXT encodings, PDF table coordinates, app-manifest names and PNG icon dimensions.
 
-38 Node.js tests passed, including Arabic normalization, BM25 ranking, synonym retrieval, cross-language semantic retrieval, rank fusion, cache isolation, malformed embeddings, quota fallback, bounded conversation history, grounded citation validation, English errors, complete static interface translations, and Vercel/HTTP handlers.
+Live Gemini checks: a direct factual answer used one generation request; its identical repeat used zero provider requests; a two-row table total was independently reviewed and returned 46 USD with two generation requests. Older regression checks covered experience overlaps, comparisons and unsupported questions.
 
-JavaScript syntax checks passed for the browser module. Secrets are excluded from Git and ZIP deliverables.
+Browser reader checks ran in a temporary local test page with the actual browser DOMParser and DecompressionStream. Word extracted the table cells in column order; PPTX extracted two slides in presentation order; TXT extracted the expected text. The normal Chrome file chooser could not be automated because the extension lacks file-URL access, so the fixture-based reader check was used. Temporary QA pages and fixtures are removed before commit.
 
-## Live Gemini checks
-
-Gemini Embedding 2 returned 768-dimensional vectors with the configured Google key. A live hybrid search answered an Arabic colloquial installment question over English document text and cited page 1. An English follow-up correctly answered three monthly installments and cited page 1. A question about the capital of France returned notFound=true with no sources. Only synthetic document content was used. The deployed Vercel /api/config reported Arabic and English support and Gemini Embedding 2. A production /api/chat request returned HTTP 200, hybrid search, an English installment answer, and page 1 attribution. The published HTML contained the language switch.
-
-## Interface verification
-
-The prior dark interface and 390px mobile layout were browser-verified before this upgrade. The bilingual HTML and attributes are checked for translation coverage. The browser connection was unavailable during the bilingual upgrade, so live language switching, populated-chat rendering and responsive English layout have not yet been visually verified.
-
-## Practical limits
-
-Semantic indexing has a 12-second deadline and falls back to keyword search. The vector cache is bounded and temporary; Vercel cold starts may repeat indexing. OCR is not implemented. Account billing tier and quota are owner-controlled. Test results do not guarantee every document answer is correct; inspect cited source pages.
-
-## General reasoning regression checks
-
-Fixed a hard two-chunks-per-page context cap that could omit evidence from single-page documents. Small documents now retain all chunks up to a 16,000-character context budget; long documents use ranked evidence plus adjacent chunks. Added a bounded Gemini query-rewriting stage for colloquial and contextual questions, with a safe fallback. Generation can calculate from cited facts and distinguish overlapping intervals.
-
-Live synthetic tests returned approximately four years for overlapping employment ranges (2020-01-01 through 2024-01-01), 46 USD for a two-line invoice, and the correct differences between Basic and Plus plans. These tests cover general retrieval/reasoning; no CV-specific answer or date was hardcoded.
+The iPhone name and icon metadata are validated; no physical iPhone installation was performed. Modern text-based formats are supported. OCR, binary .doc/.ppt and full Office rendering are outside this release. Review remains model-based and can be unavailable after quota/time limits; the response never claims an independent review succeeded when it did not. Cache persistence depends on a warm server instance.

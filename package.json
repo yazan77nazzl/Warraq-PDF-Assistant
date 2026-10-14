@@ -1,0 +1,9 @@
+{
+  "name": "warraq-pdf-assistant",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Arabic PDF assistant for Vercel with Gemini free-tier integration",
+  "engines": { "node": "22.x" },
+  "scripts": { "start": "node server.mjs", "test": "node --test tests/*.test.mjs" }
+}

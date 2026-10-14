@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="ورّاق — اسأل مستنداتك بالعربي واقرأ الإجابات مع مصادرها"><title>ورّاق — اسأل مستندك</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/style.css"></head>
+<body>
+<div class="app-shell">
+<aside class="sidebar">
+  <a class="brand" href="/" aria-label="وراق الصفحة الرئيسية"><span class="brand-icon">و</span><span>ورّاق<small>مساحة لفهم مستنداتك</small></span></a>
+  <div class="side-label">مساحة العمل</div>
+  <button class="nav active" type="button"><span>▤</span> اسأل مستندك <span class="nav-count">01</span></button>
+  <div class="upload-card" id="dropZone">
+    <div class="upload-icon">↥</div><h2>ابدأ بملف PDF</h2><p>اسحب ملفك هنا، أو اختره من جهازك.</p>
+    <label class="primary upload-label" for="fileInput">اختيار ملف <span>＋</span></label><input id="fileInput" type="file" accept="application/pdf,.pdf" class="sr-only">
+    <small>حتى 20 MB · 200 صفحة</small>
+  </div>
+  <button class="sample" id="sampleButton" type="button"><span>✧</span> جرّب مستندًا جاهزًا <span>←</span></button>
+  <button class="sample" id="samplePdfButton" type="button"><span>▤</span> جرّب PDF فعليًا <span>←</span></button>
+  <div id="documentCard" class="document-card" hidden><span class="pdf-label">PDF</span><div><strong id="documentName"></strong><small id="documentStats"></small></div><button id="removeDocument" class="icon-button" title="إزالة المستند" aria-label="إزالة المستند">×</button></div>
+  <div class="sidebar-bottom"><div class="privacy-icon">⌑</div><strong>النص، مع مصادره</strong><p>نستخرج النص في المتصفح ونرسله للخادم للبحث. عند تفعيل Gemini تُرسل المقاطع المناسبة والسؤال إلى Google.</p><span class="maker">صنعه Yazan Nazzal · مشروع Portfolio</span></div>
+</aside>
+<main class="workspace">
+  <header class="topbar"><div><span class="eyebrow">اقرأ. اسأل. افهم.</span><h1>اسأل مستندك<span class="header-dot">.</span></h1></div><div class="topbar-actions"><span id="modeBadge" class="badge">جاري الاتصال…</span><button id="configureAI" class="secondary" type="button">تفعيل Gemini</button><button id="clearChat" class="secondary" type="button">محادثة جديدة</button></div></header>
+  <div class="status-banner" id="statusBanner" role="status">Gemini متاح بخطة مجانية ذات حدود استخدام. جرّب البحث بالمقتطفات أو فعّل Gemini بمفتاحك.</div>
+  <div class="content-grid">
+    <section class="conversation-panel" aria-label="المحادثة">
+      <div id="messages" class="messages" aria-live="polite" aria-relevant="additions">
+        <div id="welcome" class="welcome">
+          <div class="paper-stack"><div class="paper-back"></div><div class="paper-front"><span>✦</span><i></i><i></i><i></i></div><div class="small-bubble">؟</div></div>
+          <span class="eyebrow">من صفحات كثيرة، إلى إجابة واضحة</span><h2>مستندك عنده الإجابة.<br>خلّينا نلاقيها معًا.</h2><p>ارفع PDF نصّي، اسأل بطريقتك، وارجع للصفحة<br class="desktop-only"> اللي وردت فيها المعلومة.</p>
+          <div class="welcome-steps"><span><b>1</b> ارفع الملف</span><span class="step-line"></span><span><b>2</b> اكتب سؤالك</span><span class="step-line"></span><span><b>3</b> اقرأ المصدر</span></div>
+          <div class="suggestions"><button data-question="لخص أهم النقاط في المستند">✧ استعرض أهم النقاط</button><button data-question="ما هي مدة الإرجاع؟">↩ ما مدة الإرجاع؟</button><button data-question="كم تستغرق مدة الشحن؟">◷ ما مدة الشحن؟</button></div>
+        </div>
+      </div>
+      <div class="composer-area"><div id="errorMessage" class="error" role="alert" hidden></div><form id="chatForm" class="composer"><textarea id="question" rows="2" maxlength="1000" placeholder="اسأل عن المعلومة اللي بدك تلاقيها…" aria-label="سؤالك عن المستند" disabled></textarea><div class="composer-bottom"><span id="composerHint">ارفع ملفًا أو جرّب المستند الجاهز أولًا</span><button id="sendButton" class="send" type="submit" aria-label="إرسال السؤال" disabled>↑</button></div></form><div class="composer-caption"><span>الإجابات مرتبطة بالنص المستخرج؛ راجع المصادر دائمًا.</span><button id="exportChat" disabled type="button">تنزيل المحادثة ↓</button></div></div>
+    </section>
+    <aside class="source-panel" aria-label="مصادر الإجابات"><div class="source-heading"><div><span class="eyebrow">الدليل، بجانب الإجابة</span><h2>المصادر</h2></div><span id="sourceCount" class="circle-count">0</span></div><div id="sources" class="sources"><div class="empty-sources"><div>▤</div><h3>كل إجابة، إلها مرجع</h3><p>المقاطع وأرقام الصفحات تظهر هون بعد سؤالك، حتى تقدر تتأكد بنفسك.</p></div></div><div class="source-footer">بحث محلي في النص · مصادر قابلة للفتح</div></aside>
+  </div>
+  <footer class="workspace-footer"><span>ورّاق <span class="footer-separator">/</span> Arabic PDF Assistant</span><span>جاهز لـVercel · v2.0</span></footer>
+</main>
+</div>
+<dialog id="sourceDialog"><div class="dialog-top"><h2 id="sourceDialogTitle">الصفحة</h2><button id="closeSource" class="icon-button" aria-label="إغلاق المصدر">×</button></div><div id="pageText" class="page-text"></div><canvas id="pdfCanvas" hidden></canvas></dialog>
+<dialog id="keyDialog"><div class="dialog-top"><h2>تفعيل Gemini للجلسة</h2><button id="closeKey" class="icon-button" aria-label="إغلاق إعدادات Gemini">×</button></div><p>اعمل مفتاحًا في <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">Google AI Studio ↗</a> باستخدام مشروع على الخطة المجانية، بدون تفعيل Billing.</p><p>المفتاح يبقى في ذاكرة التبويب ويُرسل إلى خادم التطبيق لاستخدامه مع Google فقط. لا يُحفظ في الكود أو تخزين المتصفح. الخطة المجانية محدودة، وقد تستخدم Google المحتوى لتحسين خدماتها.</p><form id="keyForm"><label for="geminiKey">مفتاح Gemini</label><input id="geminiKey" type="password" dir="ltr" autocomplete="off" spellcheck="false" placeholder="مفتاحك من Google AI Studio"><div class="key-actions"><button class="primary" type="submit">تفعيل للجلسة</button><button id="forgetKey" class="secondary" type="button">استخدام المقتطفات فقط</button></div><p id="keyError" class="error" hidden></p></form></dialog>
+<script type="module" src="/app.js"></script>
+</body></html>

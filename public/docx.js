@@ -27,10 +27,9 @@ export async function zipText(buffer,entry){
  const compressed=bytes.subarray(start,start+entry.compressed);let output;
  if(entry.method===0)output=compressed;
  else if(entry.method===8){
-  let stream;try{stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('deflate-raw'));}catch{throw new Error('المتصفح لا يدعم قراءة Word. حدّث المتصفح أو حوّل الملف إلى PDF.');}
-  const reader=stream.getReader(),parts=[];let size=0;
-  try{while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>LIMIT){await reader.cancel();throw new Error(message);}parts.push(value);}}catch{throw new Error(message);}
-  output=new Uint8Array(size);let cursor=0;for(const part of parts){output.set(part,cursor);cursor+=part.length;}
+  // Fixed output buffer bounds decompression even when the archive lies about size.
+  // Works on Safari versions without DecompressionStream('deflate-raw').
+  try{const {inflateSync}=await import('./vendor/fflate/inflate.js');output=inflateSync(compressed,{out:new Uint8Array(entry.size+1)});}catch{throw new Error(message);}
  }else throw new Error(message);
  if(output.length!==entry.size)throw new Error(message);
  return new TextDecoder('utf-8',{fatal:true}).decode(output);
@@ -41,14 +40,14 @@ function text(node){
  if(node.localName==='t')return node.textContent;
  if(node.localName==='tab')return ' | ';
  if(['br','cr'].includes(node.localName))return '\n';
- return [...node.children].map(text).join('');
+ return Array.from(node.children).map(text).join('');
 }
 function blocks(node){
  const output=[];
- for(const child of node.children){
+ for(const child of Array.from(node.children)){
   if(child.localName==='p'){const value=text(child).trim();if(value)output.push(value);}
   else if(child.localName==='tbl'){
-   const rows=[...child.children].filter(c=>c.localName==='tr').map(row=>[...row.children].filter(c=>c.localName==='tc').map(cell=>blocks(cell).join('; ')).join(' | '));
+   const rows=Array.from(child.children).filter(c=>c.localName==='tr').map(row=>Array.from(row.children).filter(c=>c.localName==='tc').map(cell=>blocks(cell).join('; ')).join(' | '));
    if(rows.length)output.push(rows.join('\n'));
   }else if(!['sectPr','del','drawing'].includes(child.localName))output.push(...blocks(child));
  }
@@ -67,10 +66,10 @@ export async function readDocx(buffer){
  const entries=zipEntries(buffer);let main='word/document.xml';
  if(entries.has('_rels/.rels')){
   const rels=parse(await zipText(buffer,entries.get('_rels/.rels')));
-  for(const rel of rels.getElementsByTagName('*'))if(rel.localName==='Relationship'&&(rel.getAttribute('Type')?.endsWith('/officeDocument')&&rel.getAttribute('TargetMode')!=='External'))main=rel.getAttribute('Target').replace(/^\//,'');
+  for(const rel of Array.from(rels.getElementsByTagName('*')))if(rel.localName==='Relationship'&&(rel.getAttribute('Type')?.endsWith('/officeDocument')&&rel.getAttribute('TargetMode')!=='External'))main=rel.getAttribute('Target').replace(/^\//,'');
  }
  if(!entries.has(main))throw new Error(message);
- const mainXml=await zipText(buffer,entries.get(main));let xmlSize=mainXml.length;const document=parse(mainXml),body=[...document.getElementsByTagName('*')].find(n=>n.localName==='body');
+ const mainXml=await zipText(buffer,entries.get(main));let xmlSize=mainXml.length;const document=parse(mainXml),body=Array.from(document.getElementsByTagName('*')).find(n=>n.localName==='body');
  if(!body)throw new Error(message);const parts=blocks(body);
  const extras=[...entries.keys()].filter(name=>/^word\/(header\d+|footer\d+|footnotes|endnotes)\.xml$/.test(name));
  if(extras.length>100)throw new Error(message);

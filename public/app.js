@@ -29,7 +29,7 @@ async function loadFile(file){
  try{
   const buffer=await file.arrayBuffer();
   if(!/\.pdf$/i.test(file.name)){
-   const type=file.name.split('.').at(-1).toLowerCase();const extracted=type==='docx'?await readDocx(buffer):type==='pptx'?await readPptx(buffer):readTxt(buffer);if(revision!==loadRevision)return;await releasePdf();setDocument(file.name,extracted,type);
+   const type=file.name.split('.').slice(-1)[0].toLowerCase();const extracted=type==='docx'?await readDocx(buffer):type==='pptx'?await readPptx(buffer):readTxt(buffer);if(revision!==loadRevision)return;await releasePdf();setDocument(file.name,extracted,type);
   }else{
    candidate=await pdfjs.getDocument({data:new Uint8Array(buffer),cMapUrl:'/vendor/pdfjs/cmaps/',cMapPacked:true,standardFontDataUrl:'/vendor/pdfjs/standard_fonts/',wasmUrl:'/vendor/pdfjs/wasm/'}).promise;
    if(candidate.numPages>200)throw new Error(t('الحد الأقصى 200 صفحة. اختر ملفًا أصغر.'));
@@ -68,7 +68,7 @@ try{const response=await fetch('/api/config');if(!response.ok)throw new Error();
 
 function setLanguage(next){
  language=next;try{localStorage.setItem('warraq-language',language);}catch{}
- document.documentElement.lang=language;document.documentElement.dir=language==='en'?'ltr':'rtl';document.title=t('ورّاق — اسأل مستندك');translateInterface(language);
+ document.documentElement.lang=language;document.documentElement.dir=language==='en'?'ltr':'rtl';document.title='Warraq';translateInterface(language);
  $('languageToggle').textContent=language==='en'?'العربية':'English';$('languageToggle').setAttribute('aria-label',language==='en'?'التبديل إلى العربية':'Switch to English');
  $('languageToggle').disabled=busy;
  document.querySelectorAll('[data-question]').forEach(button=>{if(!button.dataset.originalQuestion)button.dataset.originalQuestion=button.dataset.question;button.dataset.question=t(button.dataset.originalQuestion);});

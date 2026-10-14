@@ -53,7 +53,7 @@
 
 ## الاختبارات
 
-شغّل npm test أو node --test tests/*.test.mjs. تشمل النسخة 49 اختبارًا للاسترجاع والمصادر والـAPI وGemini ودوال Vercel. نجح أيضًا اختبار حي للبحث الهجين: سؤال عربي عن التقسيط في مستند إنجليزي، إجابة عربية من الصفحة الصحيحة، وسؤال متابعة بإجابة إنجليزية. سؤال خارج المستند أعاد notFound دون مصادر. نُشرت الواجهة على Vercel وتم التحقق من الثيم الدارك وتحميل اللوجو. بعد تغيير إعدادات Gemini، جرّب سؤالًا على ملفك للتحقق من إعدادات الإنتاج.
+شغّل npm test أو node --test tests/*.test.mjs. تشمل النسخة 50 اختبارًا للاسترجاع والمصادر والـAPI وGemini ودوال Vercel. نجح أيضًا اختبار حي للبحث الهجين: سؤال عربي عن التقسيط في مستند إنجليزي، إجابة عربية من الصفحة الصحيحة، وسؤال متابعة بإجابة إنجليزية. سؤال خارج المستند أعاد notFound دون مصادر. نُشرت الواجهة على Vercel وتم التحقق من الثيم الدارك وتحميل اللوجو. بعد تغيير إعدادات Gemini، جرّب سؤالًا على ملفك للتحقق من إعدادات الإنتاج.
 
 ## تطوير محلي اختياري
 
@@ -76,3 +76,7 @@ OCR غير مضاف. البحث بالمعنى يستخدم Gemini Embedding 2؛
 ## استهلاك الطلبات
 
 في اختبار حي: السؤال المباشر استخدم طلب توليد واحد، وتكراره المطابق استخدم صفر طلبات توليد وembeddings. سؤال حساب جدول استخدم طلبين للتوليد والمراجعة. الأسئلة العامية/المتابعة قد تحتاج طلب إعادة صياغة، والبحث الثاني قد يضيف طلبات. هذه وفورات للحالات المذكورة وليست ضمانًا لعدد ثابت أو جودة مطلقة. الكاش مؤقت وغير مضمون عبر Vercel cold starts.
+
+### iPhone / Safari compatibility
+
+PDF.js uses the official legacy build (5.6.205). Office ZIP extraction uses a bounded output buffer with fflate 0.8.2 (MIT; license included), so it does not require native deflate-raw DecompressionStream support. Page and installed-app titles stay Warraq in both languages. Re-add an existing iPhone home-screen shortcut to update its saved name.

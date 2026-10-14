@@ -70,3 +70,9 @@ test('insufficient evidence triggers one broader pass rather than accepting an u
  const result=await answerQuestion({mode:'ai',language:'en',key:'fake-retry-case-key',question:'What details are listed?',pages},{env:{},fetchImpl});
  assert.equal(result.searchPasses,2);assert.ok(secondIds.some(id=>!firstIds.includes(id)));assert.equal(result.verification,'supported');assert.equal(result.usage.generationRequests,3);
 });
+
+test('Office decompression rejects forged output sizes and needs no native decompression stream',async()=>{
+ const archive=zipFixture({'document.xml':'A'.repeat(200000)}),entry=zipEntries(archive).get('document.xml');
+ const native=globalThis.DecompressionStream;
+ try{globalThis.DecompressionStream=undefined;assert.equal((await zipText(archive,entry)).length,200000);await assert.rejects(zipText(archive,{...entry,size:10}));await assert.rejects(zipText(archive,{...entry,size:200001}));}finally{globalThis.DecompressionStream=native;}
+});

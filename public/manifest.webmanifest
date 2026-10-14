@@ -2,7 +2,7 @@
   "id": "/",
   "name": "Warraq",
   "short_name": "Warraq",
-  "description": "Ask PDF and Word documents in Arabic or English",
+  "description": "Ask PDF, Word, TXT, and PowerPoint documents in Arabic or English",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -19,5 +19,7 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "lang": "en",
+  "dir": "ltr"
 }

@@ -2,7 +2,7 @@
 
 ## Automated checks
 
-34 Node.js tests passed, including Arabic normalization, BM25 ranking, synonym retrieval, cross-language semantic retrieval, rank fusion, cache isolation, malformed embeddings, quota fallback, bounded conversation history, grounded citation validation, English errors, complete static interface translations, and Vercel/HTTP handlers.
+38 Node.js tests passed, including Arabic normalization, BM25 ranking, synonym retrieval, cross-language semantic retrieval, rank fusion, cache isolation, malformed embeddings, quota fallback, bounded conversation history, grounded citation validation, English errors, complete static interface translations, and Vercel/HTTP handlers.
 
 JavaScript syntax checks passed for the browser module. Secrets are excluded from Git and ZIP deliverables.
 
@@ -17,3 +17,9 @@ The prior dark interface and 390px mobile layout were browser-verified before th
 ## Practical limits
 
 Semantic indexing has a 12-second deadline and falls back to keyword search. The vector cache is bounded and temporary; Vercel cold starts may repeat indexing. OCR is not implemented. Account billing tier and quota are owner-controlled. Test results do not guarantee every document answer is correct; inspect cited source pages.
+
+## General reasoning regression checks
+
+Fixed a hard two-chunks-per-page context cap that could omit evidence from single-page documents. Small documents now retain all chunks up to a 16,000-character context budget; long documents use ranked evidence plus adjacent chunks. Added a bounded Gemini query-rewriting stage for colloquial and contextual questions, with a safe fallback. Generation can calculate from cited facts and distinguish overlapping intervals.
+
+Live synthetic tests returned approximately four years for overlapping employment ranges (2020-01-01 through 2024-01-01), 46 USD for a two-line invoice, and the correct differences between Basic and Plus plans. These tests cover general retrieval/reasoning; no CV-specific answer or date was hardcoded.

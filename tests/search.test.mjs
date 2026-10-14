@@ -1,6 +1,6 @@
 import {test} from 'node:test';
 import assert from 'node:assert/strict';
-import {hybridRetrieve,clearVectorCache,contextualQuery,fuseRanks} from '../lib/search.mjs';
+import {hybridRetrieve,clearVectorCache,contextualQuery,fuseRanks,completeContext} from '../lib/search.mjs';
 import {retrieve,demoAnswer,answerLanguage} from '../lib/rag.mjs';
 import {answerQuestion} from '../lib/service.mjs';
 import {translate} from '../public/i18n.js';
@@ -51,9 +51,17 @@ test('short follow-ups retain prior topic while explicit new questions remain in
  assert.equal(contextualQuery('What is the shipping cost?',history),'What is the shipping cost?');
  assert.match(contextualQuery('طيب كم يوم؟',[{question:'هل يمكن استرداد المبلغ؟',answer:'نعم.'}]),/استرداد/);
 });
-test('rank fusion includes both signals and prevents a single page monopolizing context',()=>{
+test('rank fusion prefers page diversity without discarding same-page evidence',()=>{
  const a=Array.from({length:8},(_,i)=>({id:'a'+i,page:1,text:'a'})),b=[{id:'b',page:2,text:'b'}];
- const result=fuseRanks(a,[...b,...a]);assert.ok(result.some(c=>c.id==='b'));assert.ok(result.filter(c=>c.page===1).length<=2);
+ const result=fuseRanks(a,[...b,...a]);assert.ok(result.some(c=>c.id==='b'));assert.equal(result.length,8);assert.ok(result.filter(c=>c.page===1).length>2);
+});
+test('small document context retains facts beyond the first two chunks of one page',()=>{
+ const chunks=Array.from({length:5},(_,i)=>({id:'p1-'+i*780,page:1,text:'text '.repeat(170)+(i===4?'Employment dates: 2020–2024':'')}));
+ const result=completeContext(chunks,chunks.slice(0,2));assert.equal(result.length,5);assert.match(result.at(-1).text,/2020–2024/);
+});
+test('long document context includes neighboring chunks for boundary-spanning facts',()=>{
+ const chunks=Array.from({length:24},(_,i)=>({id:'p1-'+i*780,page:1,text:'x'.repeat(900)}));
+ const result=completeContext(chunks,[chunks[12]]);assert.ok(result.some(c=>c.id===chunks[11].id));assert.ok(result.some(c=>c.id===chunks[13].id));
 });
 test('English not-found responses and validation errors are localized',async()=>{
  assert.match(demoAnswer([],'What is the weather?').answer,/could not find/);
@@ -72,6 +80,6 @@ test('conversation history is bounded and not accepted as source evidence',async
  const result=await answerQuestion({mode:'ai',language:'en',key:'fake-history-gemini',question:'How many are there?',pages,history:[{question:'Can I pay in installments?',answer:'An earlier answer.'}]},{env:{},fetchImpl});
  assert.equal(result.searchMode,'hybrid');
  const prompt=JSON.parse(generation.contents[0].parts[0].text);assert.equal(prompt.history.length,1);
- assert.match(generation.systemInstruction.parts[0].text,/History is context only/);
+ assert.match(generation.systemInstruction.parts[0].text,/History and standaloneQuestion are context only/);
  assert.match(generation.systemInstruction.parts[0].text,/Answer in English/);
 });

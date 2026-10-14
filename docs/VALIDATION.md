@@ -2,27 +2,18 @@
 
 ## Automated checks
 
-23 Node.js tests passed on the Gemini/Vercel version:
+34 Node.js tests passed, including Arabic normalization, BM25 ranking, synonym retrieval, cross-language semantic retrieval, rank fusion, cache isolation, malformed embeddings, quota fallback, bounded conversation history, grounded citation validation, English errors, complete static interface translations, and Vercel/HTTP handlers.
 
-- Arabic normalization and retrieval ranking.
-- Chunk overlap and page-number preservation.
-- Unsupported questions return no answer.
-- Summary sampling and oversized/invalid page validation.
-- Rejection of invented source identifiers.
-- Structured Gemini request contract, header-only credentials, source validation and provider error handling.
-- Vercel API handlers, no key exposure in config, session-key support, and rejection of OpenAI keys.
-- HTTP UI/config serving, document QA, malformed JSON handling and origin restrictions.
+JavaScript syntax checks passed for the browser module. Secrets are excluded from Git and ZIP deliverables.
 
-## Browser checks
+## Live Gemini checks
 
-- Uploaded a synthetic three-page PDF through the in-app browser file chooser and confirmed all three pages were extracted.
-- Tested Arabic return-policy retrieval and checked the first source was page 2.
-- Tested a question unrelated to the document and confirmed the no-answer response.
-- Tested English retrieval on the actual PDF.
-- Opened page 2 and verified the original PDF canvas was displayed.
-- Checked a 390px mobile viewport; no horizontal page overflow.
-- Checked the desktop layout, deployed dark palette, and loaded SVG logo. Temporary screenshots and demonstration PDFs are excluded from the deliverable.
+Gemini Embedding 2 returned 768-dimensional vectors with the configured Google key. A live hybrid search answered an Arabic colloquial installment question over English document text and cited page 1. An English follow-up correctly answered three monthly installments and cited page 1. A question about the capital of France returned notFound=true with no sources. Only synthetic document content was used.
 
-## Live provider check
+## Interface verification
 
-A live Gemini 3.5 Flash-Lite request succeeded with synthetic return-policy text. The Arabic answer correctly returned 14 days and cited page 1. No real CV or private document was used. Account billing tier was not verified; the owner must keep the Google project on Free Tier. The deployed Vercel interface and configured-provider badge were verified. The production provider quota and billing tier are owner-controlled. OCR is not implemented.
+The prior dark interface and 390px mobile layout were browser-verified before this upgrade. The bilingual HTML and attributes are checked for translation coverage. The browser connection was unavailable during the bilingual upgrade, so live language switching, populated-chat rendering and responsive English layout have not yet been visually verified.
+
+## Practical limits
+
+Semantic indexing has a 12-second deadline and falls back to keyword search. The vector cache is bounded and temporary; Vercel cold starts may repeat indexing. OCR is not implemented. Account billing tier and quota are owner-controlled. Test results do not guarantee every document answer is correct; inspect cited source pages.

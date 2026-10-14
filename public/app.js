@@ -37,7 +37,6 @@ $('exportChat').addEventListener('click',()=>{const text=`ورّاق — ${docum
 function refreshMode(){
  $('configureAI').hidden=Boolean(config.serverConfigured);
  $('modeBadge').textContent=config.mode==='ai'?'Gemini مُعدّ':'بحث بالمقتطفات';
- $('statusBanner').textContent=config.mode==='ai'?'Gemini مُعدّ. تُرسل المقاطع المسترجعة والسؤال إلى Google؛ الخطة المجانية لها حدود استخدام.':'Gemini متاح بخطة مجانية محدودة. اضغط تفعيل Gemini، أو جرّب البحث بالمقتطفات بدون مفتاح.';
  updateControls();
 }
 $('configureAI').addEventListener('click',()=>{if(busy)return;$('geminiKey').value='';$('keyError').hidden=true;$('keyDialog').showModal();$('geminiKey').focus();});

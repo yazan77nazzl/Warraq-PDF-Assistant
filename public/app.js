@@ -1,3 +1,4 @@
+import {readPageText} from '/pdf-reader.js';
 import {readTxt,readPptx} from '/office-text.js';
 import {readDocx} from '/docx.js';
 import {extractPdfText} from '/pdf-text.js';
@@ -34,7 +35,7 @@ async function loadFile(file){
    candidate=await pdfjs.getDocument({data:new Uint8Array(buffer),cMapUrl:'/vendor/pdfjs/cmaps/',cMapPacked:true,standardFontDataUrl:'/vendor/pdfjs/standard_fonts/',wasmUrl:'/vendor/pdfjs/wasm/'}).promise;
    if(candidate.numPages>200)throw new Error(t('الحد الأقصى 200 صفحة. اختر ملفًا أصغر.'));
    const extracted=[];let total=0;
-   for(let i=1;i<=candidate.numPages;i++){const page=await candidate.getPage(i),content=await page.getTextContent(),text=extractPdfText(content.items);total+=text.length;if(total>1000000||text.length>100000)throw new Error(t('النص المستخرج طويل جدًا. اختر ملفًا أصغر.'));extracted.push({page:i,text:text.trim()});$('modeBadge').textContent=t('قراءة الصفحة {page} / {total}',{page:i,total:candidate.numPages});}
+   for(let i=1;i<=candidate.numPages;i++){const page=await candidate.getPage(i),content=await readPageText(page),text=extractPdfText(content.items);total+=text.length;if(total>1000000||text.length>100000)throw new Error(t('النص المستخرج طويل جدًا. اختر ملفًا أصغر.'));extracted.push({page:i,text:text.trim()});$('modeBadge').textContent=t('قراءة الصفحة {page} / {total}',{page:i,total:candidate.numPages});}
    if(!extracted.some(p=>p.text.trim()))throw new Error(t('هذا PDF يحتوي على صور فقط. يلزم OCR أولًا؛ النسخة الحالية تدعم الملفات النصية.'));
    if(revision!==loadRevision){await candidate.destroy();candidate=null;return;}await releasePdf();pdf=candidate;candidate=null;setDocument(file.name,extracted,'pdf');
   }

@@ -1,6 +1,6 @@
 # Verification — 14 October 2026
 
-50 Node.js tests cover retrieval, citations, bilingual UI strings, query planning, adaptive review, request accounting, isolated answer caching, context compaction, broader retry, compressed Word packages, TXT encodings, PDF table coordinates, app-manifest names and PNG icon dimensions.
+53 Node.js tests cover retrieval, citations, bilingual UI strings, query planning, adaptive review, request accounting, isolated answer caching, context compaction, broader retry, compressed Word packages, TXT encodings, PDF table coordinates, app-manifest names and PNG icon dimensions.
 
 Live Gemini checks: a direct factual answer used one generation request; its identical repeat used zero provider requests; a two-row table total was independently reviewed and returned 46 USD with two generation requests. Older regression checks covered experience overlaps, comparisons and unsupported questions.
 
@@ -9,3 +9,5 @@ Browser reader checks ran in a temporary local test page with the actual browser
 The iPhone name and icon metadata are validated; no physical iPhone installation was performed. Modern text-based formats are supported. OCR, binary .doc/.ppt and full Office rendering are outside this release. Review remains model-based and can be unavailable after quota/time limits; the response never claims an independent review succeeded when it did not. Cache persistence depends on a warm server instance.
 
 Safari compatibility regression: PDF extraction and page rendering succeeded with Promise.withResolvers removed in a temporary browser QA page. DOCX and PPTX extraction succeeded with native DecompressionStream removed. Forged ZIP output lengths are rejected using a bounded output buffer. The title remained Warraq after switching language. These are compatibility checks in Chrome, not a physical iPhone test. Temporary QA pages and fixtures were removed before commit.
+
+Exact Safari stream regression reproduced: removing ReadableStream.prototype[Symbol.asyncIterator] makes PDF.js getTextContent fail. The application now aggregates streamTextContent using getReader(). On the same PDF, the original method failed and the fixed reader extracted all 128 characters. Tests cover non-iterable streams, multiple chunks, bounded text, cancellation, and reader lock cleanup. This verification was in Chrome with the missing Safari capability reproduced; a physical iPhone was not available.
